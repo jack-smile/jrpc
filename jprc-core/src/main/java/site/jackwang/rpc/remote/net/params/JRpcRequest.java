@@ -25,6 +25,6 @@ public class JRpcRequest {
      */
     private String methodName;
 
-    private String param1;
-    private String param2;
+    private double param1;
+    private double param2;
 }

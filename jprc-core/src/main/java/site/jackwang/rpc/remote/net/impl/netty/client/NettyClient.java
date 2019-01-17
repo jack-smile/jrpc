@@ -8,6 +8,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.SynchronousQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import site.jackwang.rpc.remote.net.impl.netty.codec.NettyDecoder;
@@ -15,10 +18,6 @@ import site.jackwang.rpc.remote.net.impl.netty.codec.NettyEncoder;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
 import site.jackwang.rpc.serialize.Serializer;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.SynchronousQueue;
 
 /**
  * Netty客户端
@@ -50,7 +49,11 @@ public class NettyClient {
         return packageMap.get(id);
     }
 
-    public static void removeById(String id) {
+    public static void putSunchronousQuee(String id, SynchronousQueue<JRpcResponse> queue) {
+        packageMap.put(id, queue);
+    }
+
+    static void removeById(String id) {
         packageMap.remove(id);
     }
 
@@ -62,22 +65,22 @@ public class NettyClient {
      * @param port 端口
      * @param serializer 序列化类
      */
-    void init(String host, int port, final Serializer serializer) throws InterruptedException {
+    public void init(String host, int port, final Serializer serializer) throws InterruptedException {
         this.group = new NioEventLoopGroup();
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group).channel(NioSocketChannel.class)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        channel.pipeline()
-                                .addLast(new NettyEncoder(JRpcRequest.class, serializer))
-                                .addLast(new NettyDecoder(JRpcResponse.class, serializer))
-                                .addLast(new NettyClientHandler());
-                    }
-                })
-                .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.SO_REUSEADDR, true)
-                .option(ChannelOption.SO_KEEPALIVE, true);
+            .handler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                protected void initChannel(SocketChannel channel) throws Exception {
+                    channel.pipeline()
+                        .addLast(new NettyEncoder(JRpcRequest.class, serializer))
+                        .addLast(new NettyDecoder(JRpcResponse.class, serializer))
+                        .addLast(new NettyClientHandler());
+                }
+            })
+            .option(ChannelOption.TCP_NODELAY, true)
+            .option(ChannelOption.SO_REUSEADDR, true)
+            .option(ChannelOption.SO_KEEPALIVE, true);
 
         this.channel = bootstrap.connect(host, port).sync().channel();
 

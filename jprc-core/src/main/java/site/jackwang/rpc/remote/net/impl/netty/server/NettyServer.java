@@ -16,12 +16,6 @@ import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
 import site.jackwang.rpc.remote.provider.JRpcProvider;
 import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.util.exception.JRpcException;
-
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Netty服务端
@@ -53,18 +47,18 @@ public class NettyServer {
             public void run() {
 
                 // param
-                final ThreadPoolExecutor serverHandlerPool = new ThreadPoolExecutor(
-                        60,
-                        300,
-                        60L,
-                        TimeUnit.SECONDS,
-                        new LinkedBlockingQueue<Runnable>(1000),
-                        new RejectedExecutionHandler() {
-                            @Override
-                            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                                throw new JRpcException("jrpc NettyServer Thread pool is EXHAUSTED!");
-                            }
-                        });		// default maxThreads 300, minThreads 60
+//                final ThreadPoolExecutor serverHandlerPool = new ThreadPoolExecutor(
+//                        60,
+//                        300,
+//                        60L,
+//                        TimeUnit.SECONDS,
+//                        new LinkedBlockingQueue<Runnable>(1000),
+//                        new RejectedExecutionHandler() {
+//                            @Override
+//                            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+//                                throw new JRpcException("jrpc NettyServer Thread pool is EXHAUSTED!");
+//                            }
+//                        });
                 EventLoopGroup bossGroup = new NioEventLoopGroup();
                 EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -104,11 +98,12 @@ public class NettyServer {
                 } finally {
 
                     // stop
-                    try {
-                        serverHandlerPool.shutdown();	// shutdownNow
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                    }
+//                    try {
+//                        // shutdownNow
+//                        serverHandlerPool.shutdown();
+//                    } catch (Exception e) {
+//                        logger.error(e.getMessage(), e);
+//                    }
                     try {
                         workerGroup.shutdownGracefully();
                         bossGroup.shutdownGracefully();
@@ -119,7 +114,7 @@ public class NettyServer {
                 }
             }
         });
-        thread.setDaemon(true);
+//        thread.setDaemon(true);
         thread.start();
     }
 }

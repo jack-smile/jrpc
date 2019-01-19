@@ -21,10 +21,17 @@ public class JRpcRequest {
     private String serviceName;
 
     /**
-     * 调用的serviceName的方法名
+     * 调用的服务{@link JRpcRequest.serviceName}中的方法名
      */
     private String methodName;
 
-    private double param1;
-    private double param2;
+    /**
+     * 参数类型
+     */
+    private Class<?>[] paramTypes;
+
+    /**
+     * 参数值
+     */
+    private Object[] params = new Object[2];
 }

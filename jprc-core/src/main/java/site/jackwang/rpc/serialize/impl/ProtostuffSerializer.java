@@ -78,8 +78,9 @@ public class ProtostuffSerializer extends Serializer {
         request.setServiceName("site.jackwang.rpc.test.CalculatorService");
         request.setMethodName("add");
         request.setId(UUID.randomUUID().toString());
-        request.setParam1(1.0f);
-        request.setParam2(2.0f);
+        request.getParams()[0] = 1.0f;
+        request.getParams()[1] = 1.2f;
+        request.setParamTypes(new Class[]{double.class, double.class});
 
         byte[] bytes = serializer.serialize(request);
         System.out.println("序列化后：" + Arrays.toString(bytes));

@@ -32,8 +32,9 @@ public class CalculatorServiceProxy implements CalculatorService {
         request.setId(UUID.randomUUID().toString());
         request.setServiceName(CalculatorService.class.getName());
         request.setMethodName("add");
-        request.setParam1(num1);
-        request.setParam2(num2);
+        request.getParams()[0] = num1;
+        request.getParams()[1] = num2;
+        request.setParamTypes(new Class[]{double.class, double.class});
 
         JRpcResponse response = sendRequest(request);
 

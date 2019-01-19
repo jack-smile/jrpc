@@ -62,8 +62,8 @@ public class JRpcProvider {
     public JRpcResponse invokeService(JRpcRequest request) {
         String serviceName = request.getServiceName();
         String methodName = request.getMethodName();
-        double param1 = request.getParam1();
-        double param2 = request.getParam2();
+        Class<?>[] paramTypes = request.getParamTypes();
+        Object[] params = request.getParams();
 
         JRpcResponse response = new JRpcResponse();
         response.setId(request.getId());
@@ -71,8 +71,8 @@ public class JRpcProvider {
         // 调用方法
         Class<?> service = interfaces.get(serviceName);
         try {
-            Method method = service.getMethod(methodName, double.class, double.class);
-            Object result = method.invoke(interfaceImpls.get(serviceName), param1, param2);
+            Method method = service.getMethod(methodName, paramTypes);
+            Object result = method.invoke(interfaceImpls.get(serviceName), params);
 
             response.setResult(result);
         } catch (Exception e) {

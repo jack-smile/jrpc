@@ -1,6 +1,7 @@
-package site.jackwang.rpc.test;
+package site.jackwang.rpc.service;
 
-import site.jackwang.rpc.test.domain.UserBo;
+
+import site.jackwang.rpc.domain.UserBo;
 
 /**
  * @author wangjie<http://www.jackwang.site/>

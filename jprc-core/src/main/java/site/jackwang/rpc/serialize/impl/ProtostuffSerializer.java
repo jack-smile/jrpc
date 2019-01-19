@@ -6,7 +6,6 @@ import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.test.domain.UserBo;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -70,7 +69,6 @@ public class ProtostuffSerializer extends Serializer {
 
     public static void main(String[] args) {
         testRequest();
-//        testPojo();
     }
 
     private static void testRequest() {
@@ -89,17 +87,5 @@ public class ProtostuffSerializer extends Serializer {
 
         JRpcRequest requestDeserialize = serializer.deserialize(bytes, JRpcRequest.class);
         System.out.println("反序列化后：" + requestDeserialize.toString());
-    }
-
-    private static void testPojo() {
-        ProtostuffSerializer serializer = new ProtostuffSerializer();
-        UserBo user = UserBo.builder().name("小王").word("hello").build();
-
-        byte[] bytes = serializer.serialize(user);
-        System.out.println("序列化后：" + Arrays.toString(bytes));
-        System.out.println("序列化后，长度：" + bytes.length);
-
-        UserBo userDeserialize = serializer.deserialize(bytes, UserBo.class);
-        System.out.println("反序列化后：" + userDeserialize.toString());
     }
 }

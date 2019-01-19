@@ -1,4 +1,4 @@
-package site.jackwang.rpc.test.domain;
+package site.jackwang.rpc.domain;
 
 import lombok.Builder;
 import lombok.Data;

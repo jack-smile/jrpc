@@ -1,6 +1,7 @@
-package site.jackwang.rpc.test.impl;
+package site.jackwang.rpc.service.impl;
 
-import site.jackwang.rpc.test.CalculatorService;
+
+import site.jackwang.rpc.service.CalculatorService;
 
 /**
  * @author wangjie<http://www.jackwang.site/>

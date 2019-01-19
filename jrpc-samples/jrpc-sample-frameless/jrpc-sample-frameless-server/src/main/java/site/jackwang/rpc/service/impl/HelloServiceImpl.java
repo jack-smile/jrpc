@@ -1,10 +1,11 @@
-package site.jackwang.rpc.test.impl;
+package site.jackwang.rpc.service.impl;
 
-import java.text.MessageFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import site.jackwang.rpc.test.HelloService;
-import site.jackwang.rpc.test.domain.UserBo;
+import site.jackwang.rpc.domain.UserBo;
+import site.jackwang.rpc.service.HelloService;
+
+import java.text.MessageFormat;
 
 /**
  * @author wangjie<http://www.jackwang.site/>

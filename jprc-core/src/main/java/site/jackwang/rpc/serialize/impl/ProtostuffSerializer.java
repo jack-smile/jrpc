@@ -4,13 +4,10 @@ import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
-import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.serialize.Serializer;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -64,29 +61,5 @@ public class ProtostuffSerializer extends Serializer {
         }
         // 返回schema对象
         return schema;
-    }
-
-
-    public static void main(String[] args) {
-        testRequest();
-    }
-
-    private static void testRequest() {
-        ProtostuffSerializer serializer = new ProtostuffSerializer();
-
-        JRpcRequest request = new JRpcRequest();
-        request.setServiceName("site.jackwang.rpc.test.CalculatorService");
-        request.setMethodName("add");
-        request.setId(UUID.randomUUID().toString());
-        request.getParams()[0] = 1.0f;
-        request.getParams()[1] = 1.2f;
-        request.setParamTypes(new Class[]{double.class, double.class});
-
-        byte[] bytes = serializer.serialize(request);
-        System.out.println("序列化后：" + Arrays.toString(bytes));
-        System.out.println("序列化后，长度：" + bytes.length);
-
-        JRpcRequest requestDeserialize = serializer.deserialize(bytes, JRpcRequest.class);
-        System.out.println("反序列化后：" + requestDeserialize.toString());
     }
 }

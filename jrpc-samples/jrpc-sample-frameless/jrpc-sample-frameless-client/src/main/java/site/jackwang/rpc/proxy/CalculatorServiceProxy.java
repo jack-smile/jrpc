@@ -1,13 +1,14 @@
-package site.jackwang.rpc.test.proxy;
+package site.jackwang.rpc.proxy;
 
-import java.util.UUID;
-import java.util.concurrent.SynchronousQueue;
 import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
 import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.test.CalculatorService;
+import site.jackwang.rpc.service.CalculatorService;
 import site.jackwang.rpc.util.exception.JRpcException;
+
+import java.util.UUID;
+import java.util.concurrent.SynchronousQueue;
 
 /**
  * @author wangjie<http://www.jackwang.site/>
@@ -31,8 +32,9 @@ public class CalculatorServiceProxy implements CalculatorService {
         request.setId(UUID.randomUUID().toString());
         request.setServiceName(CalculatorService.class.getName());
         request.setMethodName("add");
-        request.setParam1(num1);
-        request.setParam2(num2);
+        request.getParams()[0] = num1;
+        request.getParams()[1] = num2;
+        request.setParamTypes(new Class[]{double.class, double.class});
 
         JRpcResponse response = sendRequest(request);
 

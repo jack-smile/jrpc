@@ -1,4 +1,4 @@
-package site.jackwang.rpc.test;
+package site.jackwang.rpc.service;
 
 /**
  * @author wangjie<http://www.jackwang.site/>

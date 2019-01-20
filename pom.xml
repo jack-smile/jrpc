@@ -30,7 +30,7 @@
 
         <objenesis.version>2.6</objenesis.version>
         <protobuf.version>3.6.1</protobuf.version>
-        <protostuff.version>1.6.0</protostuff.version>
+        <protostuff.version>1.5.9</protostuff.version>
     </properties>
 
     <developers>

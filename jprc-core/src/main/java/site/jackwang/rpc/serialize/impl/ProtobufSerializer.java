@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ProtobufSerializer extends Serializer {
     private static Objenesis objenesis = new ObjenesisStd(true);
-    private static Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
+    private static Map<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();
 
     @Override
     public <T> byte[] serialize(T obj) {
@@ -49,13 +49,13 @@ public class ProtobufSerializer extends Serializer {
         }
     }
 
-    private static <T> Schema<T> getSchema(Class<T> cls) {
+    private static <T> Schema<T> getSchema(Class<T> clazz) {
         @SuppressWarnings("unchecked")
-        Schema<T> schema = (Schema<T>) cachedSchema.get(cls);
+        Schema<T> schema = (Schema<T>) schemaCache.get(clazz);
         if (schema == null) {
-            schema = RuntimeSchema.createFrom(cls);
+            schema = RuntimeSchema.createFrom(clazz);
             if (schema != null) {
-                cachedSchema.put(cls, schema);
+                schemaCache.put(clazz, schema);
             }
         }
         return schema;

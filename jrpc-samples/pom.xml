@@ -12,7 +12,6 @@
     <artifactId>jrpc-samples</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>jrpc-sample-springboot</module>
         <module>jrpc-sample-frameless</module>
     </modules>
 

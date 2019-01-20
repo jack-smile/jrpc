@@ -11,5 +11,18 @@
 
     <artifactId>jrpc-sample-frameless-client</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>site.jackwang</groupId>
+            <artifactId>jrpc-sample-frameless-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>site.jackwang</groupId>
+            <artifactId>jprc-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

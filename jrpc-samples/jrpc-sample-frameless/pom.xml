@@ -3,22 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>jrpc-sample-frameless</artifactId>
+        <artifactId>jrpc-samples</artifactId>
         <groupId>site.jackwang</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jrpc-sample-frameless-api</artifactId>
+    <artifactId>jrpc-sample-frameless</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>jrpc-sample-frameless-api</module>
+        <module>jrpc-sample-frameless-client</module>
+        <module>jrpc-sample-frameless-server</module>
+    </modules>
 
-    <dependencies>
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
 </project>

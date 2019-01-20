@@ -8,6 +8,5 @@ import site.jackwang.rpc.domain.UserBo;
  * @date 2019/1/17
  */
 public interface HelloService {
-    public UserBo sayHi(String name);
-
+    UserBo sayHi(String name);
 }

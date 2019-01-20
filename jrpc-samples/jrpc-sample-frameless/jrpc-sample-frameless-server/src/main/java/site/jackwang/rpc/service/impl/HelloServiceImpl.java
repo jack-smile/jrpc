@@ -17,9 +17,11 @@ public class HelloServiceImpl implements HelloService {
     @Override
     public UserBo sayHi(String name) {
         String word = MessageFormat.format("Hi {0}, from {1} as {2}",
-            name, HelloServiceImpl.class.getName(), String.valueOf(System.currentTimeMillis()));
+                name, HelloServiceImpl.class.getName(), String.valueOf(System.currentTimeMillis()));
 
-        if ("error".equalsIgnoreCase(name)) throw new RuntimeException("test exception.");
+        if ("error".equalsIgnoreCase(name)) {
+            throw new RuntimeException("test exception.");
+        }
 
         UserBo user = new UserBo(name, word);
         logger.info(user.toString());

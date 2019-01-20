@@ -8,6 +8,7 @@ import site.jackwang.rpc.util.exception.JRpcException;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -70,8 +71,14 @@ public class JRpcProvider {
 
         // 调用方法
         Class<?> service = interfaces.get(serviceName);
+        if (Objects.isNull(service)) {
+            logger.error("jrpc provider doesn't publish service: " + serviceName);
+            throw new JRpcException("jrpc provider doesn't publish service: " + serviceName);
+        }
+
         try {
             Method method = service.getMethod(methodName, paramTypes);
+            method.setAccessible(true);
             Object result = method.invoke(interfaceImpls.get(serviceName), params);
 
             response.setResult(result);

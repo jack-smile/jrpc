@@ -30,6 +30,7 @@
 
         <netty.version>4.1.32.Final</netty.version>
 
+        <hessian.version>4.0.51</hessian.version>
         <objenesis.version>2.6</objenesis.version>
         <protobuf.version>3.6.1</protobuf.version>
         <protostuff.version>1.5.9</protostuff.version>

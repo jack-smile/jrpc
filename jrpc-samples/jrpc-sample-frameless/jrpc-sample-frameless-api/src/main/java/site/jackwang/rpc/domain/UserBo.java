@@ -3,14 +3,16 @@ package site.jackwang.rpc.domain;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/17
  */
 @Data
 @Builder
-public class UserBo {
-    private static final long serialVersionUID = 42L;
+public class UserBo implements Serializable {
+    private static final long serialVersionUID = -4341178281514862942L;
 
     private String name;
     private String word;

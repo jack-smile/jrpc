@@ -15,6 +15,9 @@ public class UserBo {
     private String name;
     private String word;
 
+    public UserBo() {
+    }
+
     public UserBo(String name, String word) {
         this.name = name;
         this.word = word;

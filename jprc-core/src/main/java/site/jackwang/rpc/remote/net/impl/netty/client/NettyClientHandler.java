@@ -18,7 +18,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<JRpcResponse
     private static final Logger logger = LoggerFactory.getLogger(NettyClientHandler.class);
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, JRpcResponse jRpcResponse) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, JRpcResponse jRpcResponse) throws Exception {
         final String id = jRpcResponse.getId();
         final SynchronousQueue<JRpcResponse> synchronousQueue = NettyClient.getSynchronousQueue(id);
         synchronousQueue.put(jRpcResponse);

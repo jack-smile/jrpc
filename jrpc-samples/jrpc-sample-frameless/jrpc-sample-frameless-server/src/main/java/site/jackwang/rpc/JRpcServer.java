@@ -2,7 +2,7 @@ package site.jackwang.rpc;
 
 import site.jackwang.rpc.remote.net.impl.netty.server.NettyServer;
 import site.jackwang.rpc.remote.provider.JRpcProvider;
-import site.jackwang.rpc.serialize.impl.ProtostuffSerializer;
+import site.jackwang.rpc.serialize.SerializeEnum;
 import site.jackwang.rpc.service.CalculatorService;
 import site.jackwang.rpc.service.HelloService;
 import site.jackwang.rpc.service.impl.CalculatorServiceImpl;
@@ -19,6 +19,6 @@ public class JRpcServer {
         jRpcProvider.publishService(HelloService.class, new HelloServiceImpl());
 
         NettyServer server = new NettyServer(8888);
-        server.start(jRpcProvider, new ProtostuffSerializer());
+        server.start(jRpcProvider, SerializeEnum.HESSIAN.getSerializer());
     }
 }

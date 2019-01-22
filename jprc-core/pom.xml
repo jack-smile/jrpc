@@ -18,7 +18,6 @@
 
     <dependencies>
         <!-- ********************** base ********************** -->
-
         <!-- slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -42,12 +41,28 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- ********************** serialize (default=hessian) ********************** -->
+        <!-- hessian -->
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
+            <version>${hessian.version}</version>
         </dependency>
 
         <!-- protostuff + objenesis (provided) -->
@@ -76,6 +91,15 @@
             <version>${protobuf.version}</version>
         </dependency>
 
+        <!-- jackson (provided) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ********************** net (default=jetty) ********************** -->
         <!-- netty -->
         <dependency>
             <groupId>io.netty</groupId>

@@ -1,34 +1,27 @@
 package site.jackwang.rpc.serialize;
 
 import org.junit.Test;
-import site.jackwang.rpc.domain.UserBo;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
-import site.jackwang.rpc.serialize.impl.ProtostuffSerializer;
 
 import java.util.Arrays;
 import java.util.UUID;
 
 /**
  * @author wangjie<http://www.jackwang.site/>
- * @date 2019/1/20
+ * @date 2019/1/22
  */
-public class ProtostuffSerializerTest {
+public class SerializerTest {
     @Test
-    public void testPojo() {
-        ProtostuffSerializer serializer = new ProtostuffSerializer();
-        UserBo user = UserBo.builder().name("小王").word("hello").build();
-
-        byte[] bytes = serializer.serialize(user);
-        System.out.println("序列化后：" + Arrays.toString(bytes));
-        System.out.println("序列化后，长度：" + bytes.length);
-
-        UserBo userDeserialize = serializer.deserialize(bytes, UserBo.class);
-        System.out.println("反序列化后：" + userDeserialize.toString());
+    public void testSerializer() {
+        for (SerializeEnum serializeEnum : SerializeEnum.values()) {
+            System.out.println("serialize type: " + serializeEnum.name());
+            testRequest(serializeEnum.getSerializer());
+            System.out.println("---------------------------------------");
+            System.out.println();
+        }
     }
 
-    @Test
-    public void testRequest() {
-        ProtostuffSerializer serializer = new ProtostuffSerializer();
+    private void testRequest(Serializer serializer) {
 
         JRpcRequest request = new JRpcRequest();
         request.setServiceName("site.jackwang.rpc.test.CalculatorService");

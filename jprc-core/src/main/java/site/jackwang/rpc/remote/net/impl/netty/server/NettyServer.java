@@ -84,7 +84,8 @@ public class NettyServer {
                     // bind
                     ChannelFuture future = bootstrap.bind(port).sync();
 
-                    logger.info(">>>>>>>>>>> jrpc remoting server start success, nettype = {}, port = {}", NettyServer.class.getName(), port);
+                    logger.info(">>>>>>>>>>> jrpc remoting server start success, netType = {}, port = {}, serializeType = {}",
+                            NettyServer.class.getName(), port, serializer.getClass().getName());
 
                     // wait util stop
                     future.channel().closeFuture().sync();

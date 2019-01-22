@@ -24,11 +24,11 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<JRpcRequest>
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, JRpcRequest jRpcRequest) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, JRpcRequest jRpcRequest) throws Exception {
         // rpc提供方处理请求包
         JRpcResponse jRpcResponse = jRpcProvider.invokeService(jRpcRequest);
 
         // 回复响应包
-        channelHandlerContext.writeAndFlush(jRpcResponse);
+        ctx.writeAndFlush(jRpcResponse);
     }
 }

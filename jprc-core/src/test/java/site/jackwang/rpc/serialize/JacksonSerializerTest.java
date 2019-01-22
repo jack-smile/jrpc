@@ -3,19 +3,19 @@ package site.jackwang.rpc.serialize;
 import org.junit.Test;
 import site.jackwang.rpc.domain.UserBo;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
-import site.jackwang.rpc.serialize.impl.ProtostuffSerializer;
+import site.jackwang.rpc.serialize.impl.JacksonSerializer;
 
 import java.util.Arrays;
 import java.util.UUID;
 
 /**
  * @author wangjie<http://www.jackwang.site/>
- * @date 2019/1/20
+ * @date 2019/1/21
  */
-public class ProtostuffSerializerTest {
+public class JacksonSerializerTest {
     @Test
     public void testPojo() {
-        ProtostuffSerializer serializer = new ProtostuffSerializer();
+        JacksonSerializer serializer = new JacksonSerializer();
         UserBo user = UserBo.builder().name("小王").word("hello").build();
 
         byte[] bytes = serializer.serialize(user);
@@ -28,7 +28,7 @@ public class ProtostuffSerializerTest {
 
     @Test
     public void testRequest() {
-        ProtostuffSerializer serializer = new ProtostuffSerializer();
+        JacksonSerializer serializer = new JacksonSerializer();
 
         JRpcRequest request = new JRpcRequest();
         request.setServiceName("site.jackwang.rpc.test.CalculatorService");

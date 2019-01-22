@@ -2,6 +2,7 @@ package site.jackwang.rpc.serialize;
 
 /**
  * 序列化抽象类，定义了序列化的框架
+ * 模板模式
  *
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/13
@@ -22,5 +23,5 @@ public abstract class Serializer {
      * @param clazz 将要被反序列化成一个什么样的对象
      * @return 反序列化后的对象实例
      */
-    public abstract <T> Object deserialize(byte[] bytes, Class<T> clazz);
+    public abstract <T> T deserialize(byte[] bytes, Class<T> clazz);
 }

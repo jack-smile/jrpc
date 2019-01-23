@@ -20,23 +20,38 @@ public class JDKSerializer extends Serializer {
     @Override
     public <T> byte[] serialize(T obj) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ObjectOutputStream oos = null;
 
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(os);
+            oos = new ObjectOutputStream(os);
             oos.writeObject(obj);
+            oos.close();
             return os.toByteArray();
         } catch (IOException e) {
             throw new JRpcException(e);
+        } finally {
+            try {
+                oos.close();
+            } catch (IOException e) {
+                throw new JRpcException(e);
+            }
         }
     }
 
     @Override
     public <T> T deserialize(byte[] bytes, Class<T> clazz) {
+        ObjectInputStream ois = null;
         try {
-            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             return (T) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new JRpcException(e);
+        } finally {
+            try {
+                ois.close();
+            } catch (IOException e) {
+                throw new JRpcException(e);
+            }
         }
     }
 }

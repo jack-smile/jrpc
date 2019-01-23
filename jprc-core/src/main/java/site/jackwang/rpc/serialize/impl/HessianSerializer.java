@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Hessian序列化
  * 一个性能较优且兼容性较好的二进制序列化协议。RPC
- * the serialize class must implement java.io.Serializable
+ * !!! the serialize class must implement java.io.Serializable
  *
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/22
@@ -25,8 +25,7 @@ public class HessianSerializer extends Serializer {
         try {
             ho.writeObject(obj);
             ho.flush();
-            byte[] result = os.toByteArray();
-            return result;
+            return os.toByteArray();
         } catch (IOException e) {
             throw new JRpcException(e);
         } finally {

@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.util.exception.ErrorCodes;
 import site.jackwang.rpc.util.exception.JRpcException;
 
 /**
@@ -26,17 +27,17 @@ public class HessianSerializer extends Serializer {
             ho.flush();
             return os.toByteArray();
         } catch (IOException e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
         } finally {
             try {
                 ho.close();
             } catch (IOException e) {
-                throw new JRpcException(e);
+                throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
             }
             try {
                 os.close();
             } catch (IOException e) {
-                throw new JRpcException(e);
+                throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
             }
         }
     }
@@ -49,17 +50,17 @@ public class HessianSerializer extends Serializer {
             Object result = hi.readObject();
             return clazz.cast(result);
         } catch (IOException e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
         } finally {
             try {
                 hi.close();
             } catch (Exception e) {
-                throw new JRpcException(e);
+                throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
             }
             try {
                 is.close();
             } catch (IOException e) {
-                throw new JRpcException(e);
+                throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
             }
         }
     }

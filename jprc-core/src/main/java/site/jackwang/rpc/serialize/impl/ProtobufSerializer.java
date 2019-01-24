@@ -7,6 +7,7 @@ import io.protostuff.runtime.RuntimeSchema;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.util.exception.ErrorCodes;
 import site.jackwang.rpc.util.exception.JRpcException;
 
 import java.util.Map;
@@ -31,7 +32,7 @@ public class ProtobufSerializer extends Serializer {
             Schema<T> schema = getSchema(cls);
             return ProtostuffIOUtil.toByteArray(obj, schema, buffer);
         } catch (Exception e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
         } finally {
             buffer.clear();
         }
@@ -45,7 +46,7 @@ public class ProtobufSerializer extends Serializer {
             ProtostuffIOUtil.mergeFrom(bytes, message, schema);
             return message;
         } catch (Exception e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
         }
     }
 

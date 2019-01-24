@@ -1,15 +1,16 @@
 package site.jackwang.rpc.remote.provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import site.jackwang.rpc.remote.net.params.JRpcRequest;
-import site.jackwang.rpc.remote.net.params.JRpcResponse;
-import site.jackwang.rpc.util.exception.JRpcException;
-
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import site.jackwang.rpc.remote.net.params.JRpcRequest;
+import site.jackwang.rpc.remote.net.params.JRpcResponse;
+import site.jackwang.rpc.util.ReflectUtils;
+import site.jackwang.rpc.util.exception.ErrorCodes;
+import site.jackwang.rpc.util.exception.JRpcException;
 
 /**
  * 服务提供方
@@ -43,11 +44,11 @@ public class JRpcProvider {
      */
     public void publishService(Class serviceInterface, Object serviceImpl) {
         if (interfaces.containsKey(serviceInterface.getName()) || interfaceImpls.containsKey(serviceInterface.getName())) {
-            throw new JRpcException("serviceInterface " + serviceInterface.getName() + " has been registered!");
+            throw new JRpcException(ErrorCodes.PUBLISH_SERVICE_NOT_REGISTERED, serviceInterface.getName());
         }
 
         if (!serviceInterface.isInstance(serviceImpl)) {
-            throw new JRpcException("serviceImpl " + serviceImpl.toString() + " must implement the interface " + serviceInterface.getName());
+            throw new JRpcException(ErrorCodes.PUBLISH_SERVICE_NOT_IMPLEMENT_INTERFACE, serviceImpl.toString(), serviceInterface.getName());
         }
 
         interfaces.put(serviceInterface.getName(), serviceInterface);
@@ -73,15 +74,18 @@ public class JRpcProvider {
         Class<?> service = interfaces.get(serviceName);
         if (Objects.isNull(service)) {
             logger.error("jrpc provider doesn't publish service: " + serviceName);
-            throw new JRpcException("jrpc provider doesn't publish service: " + serviceName);
+            throw new JRpcException(ErrorCodes.PUBLISH_SERVICE_NON, serviceName);
         }
 
         try {
-            Method method = service.getMethod(methodName, paramTypes);
+            Method method = ReflectUtils.getMethod(service, methodName, paramTypes);
             method.setAccessible(true);
-            Object result = method.invoke(interfaceImpls.get(serviceName), params);
+            Object result = ReflectUtils.invoke(method, interfaceImpls.get(serviceName), params);
 
             response.setResult(result);
+        } catch (JRpcException e) {
+            logger.error("jrpc provider invokeService error.{}", e.getErrorMessage());
+            response.setMessage("jprc provider invokeService error，" + e.getErrorMessage());
         } catch (Exception e) {
             logger.error("jrpc provider invokeService error.{}", e);
             response.setMessage("jprc provider invokeService error，" + e.toString());

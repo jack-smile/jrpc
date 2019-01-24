@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.util.exception.ErrorCodes;
 import site.jackwang.rpc.util.exception.JRpcException;
 
 /**
@@ -28,12 +29,12 @@ public class JDKSerializer extends Serializer {
             oos.close();
             return os.toByteArray();
         } catch (IOException e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
         } finally {
             try {
                 oos.close();
             } catch (IOException e) {
-                throw new JRpcException(e);
+                throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
             }
         }
     }
@@ -45,12 +46,12 @@ public class JDKSerializer extends Serializer {
             ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             return clazz.cast(ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
         } finally {
             try {
                 ois.close();
             } catch (IOException e) {
-                throw new JRpcException(e);
+                throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
             }
         }
     }

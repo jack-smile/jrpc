@@ -3,6 +3,7 @@ package site.jackwang.rpc.serialize.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.util.exception.ErrorCodes;
 import site.jackwang.rpc.util.exception.JRpcException;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class JacksonSerializer extends Serializer {
         try {
             return objectMapper.writeValueAsBytes(obj);
         } catch (JsonProcessingException e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
         }
     }
 
@@ -31,7 +32,7 @@ public class JacksonSerializer extends Serializer {
         try {
             return objectMapper.readValue(data, clazz);
         } catch (IOException e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
         }
     }
 }

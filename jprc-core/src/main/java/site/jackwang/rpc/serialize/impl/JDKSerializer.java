@@ -1,41 +1,38 @@
 package site.jackwang.rpc.serialize.impl;
 
-import com.caucho.hessian.io.Hessian2Input;
-import com.caucho.hessian.io.Hessian2Output;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import site.jackwang.rpc.serialize.Serializer;
 import site.jackwang.rpc.util.exception.ErrorCodes;
 import site.jackwang.rpc.util.exception.JRpcException;
 
 /**
- * Hessian序列化
- * 一个性能较优且兼容性较好的二进制序列化协议。RPC
+ * jdk自带的序列化工具
+ * 一个对象可以被表示为一个字节序列，该字节序列包括该对象的数据、有关对象的类型的信息和存储在对象中数据的类型。
  * !!! the serialize class must implement java.io.Serializable
  *
  * @author wangjie<http://www.jackwang.site/>
- * @date 2019/1/22
+ * @date 2019/1/23
  */
-public class HessianSerializer extends Serializer {
+public class JDKSerializer extends Serializer {
     @Override
     public <T> byte[] serialize(T obj) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        Hessian2Output ho = new Hessian2Output(os);
+        ObjectOutputStream oos = null;
+
         try {
-            ho.writeObject(obj);
-            ho.flush();
+            oos = new ObjectOutputStream(os);
+            oos.writeObject(obj);
+            oos.close();
             return os.toByteArray();
         } catch (IOException e) {
             throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
         } finally {
             try {
-                ho.close();
-            } catch (IOException e) {
-                throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
-            }
-            try {
-                os.close();
+                oos.close();
             } catch (IOException e) {
                 throw new JRpcException(e, ErrorCodes.SERIALIZE_FAILURE, obj);
             }
@@ -44,21 +41,15 @@ public class HessianSerializer extends Serializer {
 
     @Override
     public <T> T deserialize(byte[] bytes, Class<T> clazz) {
-        ByteArrayInputStream is = new ByteArrayInputStream(bytes);
-        Hessian2Input hi = new Hessian2Input(is);
+        ObjectInputStream ois = null;
         try {
-            Object result = hi.readObject();
-            return clazz.cast(result);
-        } catch (IOException e) {
+            ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            return clazz.cast(ois.readObject());
+        } catch (IOException | ClassNotFoundException e) {
             throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
         } finally {
             try {
-                hi.close();
-            } catch (Exception e) {
-                throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
-            }
-            try {
-                is.close();
+                ois.close();
             } catch (IOException e) {
                 throw new JRpcException(e, ErrorCodes.DESERIALIZE_FAILURE, clazz.getName());
             }

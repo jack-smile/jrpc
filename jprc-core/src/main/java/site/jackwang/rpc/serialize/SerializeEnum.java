@@ -1,6 +1,7 @@
 package site.jackwang.rpc.serialize;
 
 import site.jackwang.rpc.serialize.impl.HessianSerializer;
+import site.jackwang.rpc.serialize.impl.JDKSerializer;
 import site.jackwang.rpc.serialize.impl.JacksonSerializer;
 import site.jackwang.rpc.serialize.impl.ProtobufSerializer;
 import site.jackwang.rpc.serialize.impl.ProtostuffSerializer;
@@ -17,7 +18,8 @@ public enum SerializeEnum {
     HESSIAN(HessianSerializer.class),
     JACKSON(JacksonSerializer.class),
     PROTOBUF(ProtobufSerializer.class),
-    PROTOSTUFF(ProtostuffSerializer.class);
+    PROTOSTUFF(ProtostuffSerializer.class),
+    JDK_SERIALIZE(JDKSerializer.class);
 
     private Class<? extends Serializer> serializerClass;
 

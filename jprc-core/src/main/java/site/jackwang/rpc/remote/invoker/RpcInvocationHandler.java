@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
+import site.jackwang.rpc.util.exception.ErrorCodes;
 import site.jackwang.rpc.util.exception.JRpcException;
 
 import java.lang.reflect.InvocationHandler;
@@ -84,7 +85,7 @@ public class RpcInvocationHandler implements InvocationHandler {
             client.send(request);
             return queue.take();
         } catch (InterruptedException e) {
-            throw new JRpcException(e);
+            throw new JRpcException(e, ErrorCodes.NETTY_SEND_INTERRUPTED);
         }
     }
 }

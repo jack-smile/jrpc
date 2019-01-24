@@ -2,12 +2,11 @@ package site.jackwang.rpc.serialize.impl;
 
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;
-import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.util.exception.JRpcException;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.util.exception.JRpcException;
 
 /**
  * Hessian序列化
@@ -48,7 +47,7 @@ public class HessianSerializer extends Serializer {
         Hessian2Input hi = new Hessian2Input(is);
         try {
             Object result = hi.readObject();
-            return (T) result;
+            return clazz.cast(result);
         } catch (IOException e) {
             throw new JRpcException(e);
         } finally {

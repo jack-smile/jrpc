@@ -43,7 +43,7 @@ public class JDKSerializer extends Serializer {
         ObjectInputStream ois = null;
         try {
             ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            return (T) ois.readObject();
+            return clazz.cast(ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
             throw new JRpcException(e);
         } finally {

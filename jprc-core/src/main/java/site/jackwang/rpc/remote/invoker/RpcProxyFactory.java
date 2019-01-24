@@ -15,6 +15,6 @@ public final class RpcProxyFactory {
     public static <T> T getProxy(Class<T> proxyClass, NettyClient client) {
         InvocationHandler handler = new RpcInvocationHandler(proxyClass, client);
 
-        return (T) Proxy.newProxyInstance(handler.getClass().getClassLoader(), new Class[]{proxyClass}, handler);
+        return proxyClass.cast(Proxy.newProxyInstance(handler.getClass().getClassLoader(), new Class[]{proxyClass}, handler));
     }
 }

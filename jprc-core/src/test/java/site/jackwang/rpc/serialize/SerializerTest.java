@@ -31,7 +31,10 @@ public class SerializerTest {
         request.getParams()[1] = 1.2f;
         request.setParamTypes(new Class[]{double.class, double.class});
 
+        long start = System.currentTimeMillis();
         byte[] bytes = serializer.serialize(request);
+        System.out.println("序列化耗时：" + (System.currentTimeMillis() - start));
+
         System.out.println("序列化后：" + Arrays.toString(bytes));
         System.out.println("序列化后，长度：" + bytes.length);
 

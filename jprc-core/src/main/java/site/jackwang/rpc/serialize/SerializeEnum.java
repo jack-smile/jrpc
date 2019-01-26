@@ -1,10 +1,6 @@
 package site.jackwang.rpc.serialize;
 
-import site.jackwang.rpc.serialize.impl.HessianSerializer;
-import site.jackwang.rpc.serialize.impl.JDKSerializer;
-import site.jackwang.rpc.serialize.impl.JacksonSerializer;
-import site.jackwang.rpc.serialize.impl.ProtobufSerializer;
-import site.jackwang.rpc.serialize.impl.ProtostuffSerializer;
+import site.jackwang.rpc.serialize.impl.*;
 import site.jackwang.rpc.util.exception.JRpcException;
 
 /**
@@ -19,7 +15,8 @@ public enum SerializeEnum {
     JACKSON(JacksonSerializer.class),
     PROTOBUF(ProtobufSerializer.class),
     PROTOSTUFF(ProtostuffSerializer.class),
-    JDK_SERIALIZE(JDKSerializer.class);
+    JDK_SERIALIZE(JDKSerializer.class),
+    FASTJSON_SERIALIZE(FastjsonSerializer.class);
 
     private Class<? extends Serializer> serializerClass;
 

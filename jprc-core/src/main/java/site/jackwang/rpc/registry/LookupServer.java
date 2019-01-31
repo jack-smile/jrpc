@@ -1,6 +1,6 @@
 package site.jackwang.rpc.registry;
 
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * 查找活跃的服务器信息
@@ -10,10 +10,10 @@ import java.util.TreeSet;
  */
 public interface LookupServer {
     /**
-     * 查找一个活跃的服务器地址
+     * 查找一个活跃的服务器集群地址
      *
      * @param serverName 服务名称
      * @return 服务器地址
      */
-    TreeSet<String> lookupOne(String serverName);
+    HashSet<String> lookupOne(String serverName);
 }

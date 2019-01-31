@@ -1,8 +1,10 @@
 package site.jackwang.rpc.registry.impl;
 
+import io.netty.util.internal.StringUtil;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Objects;
 import site.jackwang.rpc.registry.ServerRegistry;
 
 /**
@@ -17,30 +19,50 @@ public class LocalServerRegistry extends ServerRegistry {
      * key：服务名称
      * value：服务对应的不同服务器地址集
      */
-    private Map<String, HashSet<String>> registryServer;
+    private Map<String, HashSet<String>> registryServers;
 
     @Override
     public void start() {
-
+        registryServers = new HashMap<>();
     }
 
     @Override
     public void stop() {
-
+        registryServers.clear();
     }
 
     @Override
-    public TreeSet<String> lookupOne(String serverName) {
-        return null;
+    public HashSet<String> lookupOne(String serverName) {
+        return registryServers.get(serverName);
     }
 
     @Override
     public boolean register(String serverName, String address) {
-        return false;
+        if (StringUtil.isNullOrEmpty(serverName) || StringUtil.isNullOrEmpty(address)) {
+            return false;
+        }
+
+        HashSet<String> addresses = registryServers.get(serverName);
+        if (Objects.isNull(addresses)) {
+            addresses = new HashSet<>();
+            registryServers.put(serverName, addresses);
+        }
+        addresses.add(address);
+
+        return true;
     }
 
     @Override
     public boolean remove(String serverName, String address) {
-        return false;
+        if (StringUtil.isNullOrEmpty(serverName) || StringUtil.isNullOrEmpty(address)) {
+            return false;
+        }
+
+        HashSet<String> addresses = registryServers.get(serverName);
+        if (Objects.isNull(addresses)) {
+            return true;
+        }
+
+        return addresses.remove(address);
     }
 }

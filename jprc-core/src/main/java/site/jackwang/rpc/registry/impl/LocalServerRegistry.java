@@ -14,16 +14,22 @@ import site.jackwang.rpc.registry.ServerRegistry;
  * @date 2019/1/30
  */
 public class LocalServerRegistry extends ServerRegistry {
+    private static volatile LocalServerRegistry instance = new LocalServerRegistry();
+
     /**
      * 已注册的服务器信息
      * key：服务名称
      * value：服务对应的不同服务器地址集
      */
-    private Map<String, HashSet<String>> registryServers;
+    private Map<String, HashSet<String>> registryServers = new HashMap<>();
+
+    public static LocalServerRegistry getInstance() {
+        return instance;
+    }
 
     @Override
     public void start() {
-        registryServers = new HashMap<>();
+//        registryServers = new HashMap<>();
     }
 
     @Override

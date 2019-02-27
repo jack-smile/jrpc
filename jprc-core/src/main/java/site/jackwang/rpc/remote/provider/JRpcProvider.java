@@ -6,8 +6,12 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import site.jackwang.rpc.registry.ServerRegistry;
+import site.jackwang.rpc.remote.net.impl.netty.server.NettyServer;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
+import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.util.IpUtils;
 import site.jackwang.rpc.util.ReflectUtils;
 import site.jackwang.rpc.util.exception.ErrorCodes;
 import site.jackwang.rpc.util.exception.JRpcException;
@@ -22,6 +26,21 @@ public class JRpcProvider {
     private static final Logger logger = LoggerFactory.getLogger(JRpcProvider.class);
 
     /**
+     * 服务器的地址
+     */
+    private String ip;
+
+    /**
+     * 服务器的监听端口
+     */
+    private int port;
+
+    /**
+     * 服务器的地址，格式：ip:port
+     */
+    private String address;
+
+    /**
      * 接口名和对应的接口类
      * key：接口名称
      * value：接口名对应的类
@@ -34,6 +53,45 @@ public class JRpcProvider {
      * value：实现类
      */
     private Map<String, Object> interfaceImpls = new ConcurrentHashMap<>();
+
+    /**
+     * 注册器
+     */
+    private ServerRegistry serverRegistry;
+
+    /**
+     * 序列化类
+     */
+    private Serializer serializer;
+
+
+    /**
+     * 初始化配置
+     *
+     * @param serverRegistry 注册器
+     * @param serializer     序列化方式
+     * @param port           监听端口
+     */
+    public void init(ServerRegistry serverRegistry, Serializer serializer, String ip, int port) {
+        this.serverRegistry = serverRegistry;
+        this.serializer = serializer;
+        this.ip = ip;
+        if (Objects.isNull(this.ip)) {
+            this.ip = IpUtils.getIp();
+        }
+        this.port = port;
+        this.address = IpUtils.getIpPort(this.ip, port);
+    }
+
+    /**
+     * 启动
+     */
+    public void start() {
+        NettyServer server = new NettyServer(port);
+        server.start(this, serializer);
+
+        serverRegistry.start();
+    }
 
     /**
      * 发布服务
@@ -53,6 +111,8 @@ public class JRpcProvider {
 
         interfaces.put(serviceInterface.getName(), serviceInterface);
         interfaceImpls.put(serviceInterface.getName(), serviceImpl);
+
+        serverRegistry.register(serviceInterface.getName(), address);
     }
 
     /**

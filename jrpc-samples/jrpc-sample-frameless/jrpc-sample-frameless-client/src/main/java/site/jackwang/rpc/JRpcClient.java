@@ -1,12 +1,16 @@
 package site.jackwang.rpc;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import site.jackwang.rpc.proxy.CalculatorServiceProxy;
+import site.jackwang.rpc.registry.impl.LocalServerRegistry;
 import site.jackwang.rpc.remote.invoker.RpcProxyFactory;
 import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
 import site.jackwang.rpc.serialize.SerializeEnum;
 import site.jackwang.rpc.serialize.impl.ProtostuffSerializer;
 import site.jackwang.rpc.service.CalculatorService;
 import site.jackwang.rpc.service.HelloService;
+import site.jackwang.rpc.util.IpUtils;
 
 /**
  * @author wangjie<http://www.jackwang.site/>
@@ -29,7 +33,11 @@ public class JRpcClient {
 
     private static void testCalculatorService() throws InterruptedException {
         NettyClient client = new NettyClient();
-        client.init("127.0.0.1", 8888, SerializeEnum.HESSIAN.getSerializer());
+        HashSet<String> serverAddresses = LocalServerRegistry.getInstance().lookupOne(CalculatorService.class.getName());
+        Iterator<String> it = serverAddresses.iterator();
+        Object[] ipPort = IpUtils.parseIpPort(it.next());
+        client.init((String) ipPort[0], (int) ipPort[1], SerializeEnum.HESSIAN.getSerializer());
+
         CalculatorService calculatorService = RpcProxyFactory.getProxy(CalculatorService.class, client);
         System.out.println(calculatorService.add(1.0f, 2.0f));
         System.out.println(calculatorService.substract(1.0f, 2.0f));

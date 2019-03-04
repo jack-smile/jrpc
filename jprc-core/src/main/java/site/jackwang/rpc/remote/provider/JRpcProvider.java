@@ -112,7 +112,9 @@ public class JRpcProvider {
         interfaces.put(serviceInterface.getName(), serviceInterface);
         interfaceImpls.put(serviceInterface.getName(), serviceImpl);
 
-        serverRegistry.register(serviceInterface.getName(), address);
+        if (Objects.nonNull(serverRegistry)) {
+            serverRegistry.register(serviceInterface.getName(), address);
+        }
     }
 
     /**

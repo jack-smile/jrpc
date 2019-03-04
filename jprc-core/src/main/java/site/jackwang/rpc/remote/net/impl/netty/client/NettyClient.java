@@ -61,8 +61,8 @@ public class NettyClient {
     /**
      * 初始化客户端
      *
-     * @param host ip地址
-     * @param port 端口
+     * @param host       ip地址
+     * @param port       端口
      * @param serializer 序列化类
      */
     public void init(String host, int port, final Serializer serializer) throws InterruptedException {

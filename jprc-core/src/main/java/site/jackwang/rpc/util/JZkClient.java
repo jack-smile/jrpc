@@ -24,20 +24,20 @@ public class JZkClient {
 	private static Logger logger = LoggerFactory.getLogger(JZkClient.class);
 
 
-	private String zkaddress;
+	private String zkAddress;
 
-	private String zkpath;
+	private String zkPath;
 
-	private String zkdigest;
+	private String zkDigest;
 
 	private Watcher watcher;
 
 
-	public JZkClient(String zkaddress, String zkpath, String zkdigest, Watcher watcher) {
+	public JZkClient(String zkAddress, String zkPath, String zkDigest, Watcher watcher) {
 
-		this.zkaddress = zkaddress;
-		this.zkpath = zkpath;
-		this.zkdigest = zkdigest;
+		this.zkAddress = zkAddress;
+		this.zkPath = zkPath;
+		this.zkDigest = zkDigest;
 		this.watcher = watcher;
 
 		// reconnect when expire
@@ -69,11 +69,11 @@ public class JZkClient {
                     ZooKeeper newZk = null;
                     try {
                         if (zooKeeper == null) {		// 二次校验，防止并发创建client
-                            newZk = new ZooKeeper(zkaddress, 10000, watcher);
-                            if (zkdigest!=null && zkdigest.trim().length()>0) {
-                                newZk.addAuthInfo("digest",zkdigest.getBytes());		// like "account:password"
+                            newZk = new ZooKeeper(zkAddress, 10000, watcher);
+                            if (zkDigest !=null && zkDigest.trim().length()>0) {
+                                newZk.addAuthInfo("digest", zkDigest.getBytes());		// like "account:password"
                             }
-                            newZk.exists(zkpath, false);		// sync wait until succcess conn
+                            newZk.exists(zkPath, false);		// sync wait until succcess conn
 
                             // set success new-client
                             zooKeeper = newZk;

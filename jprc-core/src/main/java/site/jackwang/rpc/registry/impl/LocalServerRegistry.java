@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
-import site.jackwang.rpc.registry.ServerRegistry;
+import site.jackwang.rpc.registry.AbstractServerRegistry;
 
 /**
  * 本地缓存的服务注册器
@@ -13,7 +13,7 @@ import site.jackwang.rpc.registry.ServerRegistry;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/30
  */
-public class LocalServerRegistry extends ServerRegistry {
+public class LocalServerRegistry extends AbstractServerRegistry {
     private static volatile LocalServerRegistry instance = new LocalServerRegistry();
 
     /**
@@ -25,6 +25,11 @@ public class LocalServerRegistry extends ServerRegistry {
 
     public static LocalServerRegistry getInstance() {
         return instance;
+    }
+
+    @Override
+    public void init(Map<String, String> param) {
+
     }
 
     @Override

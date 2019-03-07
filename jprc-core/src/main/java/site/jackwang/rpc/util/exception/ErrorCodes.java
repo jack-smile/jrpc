@@ -30,8 +30,18 @@ public enum ErrorCodes {
     PUBLISH_SERVICE_NOT_IMPLEMENT_INTERFACE(12001, "serviceImpl %s must implement the interface %s"),
     PUBLISH_SERVICE_NON(12002, "jrpc provider doesn't publish service: %s"),
 
+    // registry
+    SERVICE_REGISTRY_ZK_NOT_FOUND(13000, "JZkClient.zooKeeper is null."),
+    SERVICE_REGISTRY_ZK_CREATE_NODE_FAILURE(13001, "JZkClient.zooKeeper create node failure."),
+    SERVICE_REGISTRY_ZK_DELETE_NODE_FAILURE(13002, "JZkClient.zooKeeper delete node failure."),
+    SERVICE_REGISTRY_ZK_SET_DATA_FAILURE(13003, "JZkClient.zooKeeper set data failure."),
+    SERVICE_REGISTRY_ZK_GET_DATA_FAILURE(13004, "JZkClient.zooKeeper get data failure."),
+    SERVICE_REGISTRY_ZK_SET_CHILD_DATA_FAILURE(13005, "JZkClient.zooKeeper set child data failure."),
+    SERVICE_REGISTRY_ZK_DELETE_CHILD_DATA_FAILURE(13006, "JZkClient.zooKeeper delete child data failure."),
+    SERVICE_REGISTRY_ZK_GET_CHILD_DATA_FAILURE(13007, "JZkClient.zooKeeper get child data failure."),
 
-    // reserved error code from 13000-19999
+
+    // reserved error code from 14000-19999
     INTERNAL_ERROR (19998, "internal error"),
     UNEXPECTED_ERROR (19999, "unexpected error. Please submit a issue");
     

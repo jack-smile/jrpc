@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import site.jackwang.rpc.registry.ServerRegistry;
+import site.jackwang.rpc.registry.AbstractServerRegistry;
 import site.jackwang.rpc.remote.net.impl.netty.server.NettyServer;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
@@ -57,7 +57,7 @@ public class JRpcProvider {
     /**
      * 注册器
      */
-    private ServerRegistry serverRegistry;
+    private AbstractServerRegistry serverRegistry;
 
     /**
      * 序列化类
@@ -72,7 +72,7 @@ public class JRpcProvider {
      * @param serializer     序列化方式
      * @param port           监听端口
      */
-    public void init(ServerRegistry serverRegistry, Serializer serializer, String ip, int port) {
+    public void init(AbstractServerRegistry serverRegistry, Serializer serializer, String ip, int port) {
         this.serverRegistry = serverRegistry;
         this.serializer = serializer;
         this.ip = ip;

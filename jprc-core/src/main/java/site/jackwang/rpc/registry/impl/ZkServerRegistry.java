@@ -87,21 +87,23 @@ public class ZkServerRegistry extends AbstractServerRegistry {
                 zkClient.getClient().exists(path, null);
 
                 if (Watcher.Event.EventType.NodeChildrenChanged == event.getType()) {
-                    refreshRegistryServers(serverName);
+                    refreshLocalRegistryServers(serverName);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
 
-        // 后台开启线程定时刷新
+        // TODO 后台开启线程定时刷新本地缓存
 
         logger.info(">>>>>>>>>>> jrpc, ZkServerRegistry init success. [env={}]", zkPath);
     }
 
     @Override
     public void stop() {
-
+        if (Objects.nonNull(zkClient)) {
+            zkClient.destroy();
+        }
     }
 
     @Override
@@ -115,6 +117,7 @@ public class ZkServerRegistry extends AbstractServerRegistry {
             return false;
         }
 
+        // 本地存储
         HashSet<String> addresses = registryServers.get(serverName);
         if (Objects.isNull(addresses)) {
             addresses = new HashSet<>();
@@ -122,6 +125,7 @@ public class ZkServerRegistry extends AbstractServerRegistry {
         }
         addresses.add(address);
 
+        // zk存储
         String path = serverNameToPath(serverName);
         zkClient.setChildPathData(path, address, "");
 
@@ -130,7 +134,24 @@ public class ZkServerRegistry extends AbstractServerRegistry {
 
     @Override
     public boolean remove(String serverName, String address) {
-        return false;
+        if (StringUtil.isNullOrEmpty(serverName) || StringUtil.isNullOrEmpty(address)) {
+            return false;
+        }
+
+        HashSet<String> addresses = registryServers.get(serverName);
+        if (Objects.isNull(addresses)) {
+            return true;
+        }
+
+        addresses.remove(address);
+
+        String path = serverNameToPath(serverName);
+        try {
+            zkClient.deleteChildPath(path, address);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
@@ -157,6 +178,17 @@ public class ZkServerRegistry extends AbstractServerRegistry {
         return nodePath.substring(zkPath.length(), nodePath.length());
     }
 
-    private void refreshRegistryServers(String serverName) {
+    private void refreshLocalRegistryServers(String serverName) {
+        String path = serverNameToPath(serverName);
+        Map<String, String> address = zkClient.getChildPathData(path);
+        HashSet<String> addresses = registryServers.get(serverName);
+        if (Objects.isNull(addresses)) {
+            addresses = new HashSet<>();
+            registryServers.put(serverName, addresses);
+        }
+        if (Objects.nonNull(address) && address.size() > 0) {
+            addresses.clear();
+            addresses.addAll(address.keySet());
+        }
     }
 }

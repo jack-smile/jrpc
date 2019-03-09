@@ -16,13 +16,6 @@ import site.jackwang.rpc.registry.AbstractServerRegistry;
 public class LocalServerRegistry extends AbstractServerRegistry {
     private static volatile LocalServerRegistry instance = new LocalServerRegistry();
 
-    /**
-     * 已注册的服务器信息
-     * key：服务名称
-     * value：服务对应的不同服务器地址集
-     */
-    private Map<String, HashSet<String>> registryServers = new HashMap<>();
-
     public static LocalServerRegistry getInstance() {
         return instance;
     }

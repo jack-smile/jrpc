@@ -1,5 +1,7 @@
 package site.jackwang.rpc.registry.impl;
 
+import io.netty.util.internal.StringUtil;
+import org.apache.zookeeper.Watcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import site.jackwang.rpc.registry.AbstractServerRegistry;
@@ -7,6 +9,7 @@ import site.jackwang.rpc.util.JZkClient;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 使用zookeeper作为注册中心
@@ -69,8 +72,31 @@ public class ZkServerRegistry extends AbstractServerRegistry {
     @Override
     public void start() {
         zkClient = new JZkClient(zkAddress, zkPath, zkDigest, event -> {
+            if (Watcher.Event.KeeperState.Expired == event.getState()) {
+                // 过期，关闭旧连接，重新创建新连接
+                zkClient.destroy();
+                zkClient.getClient();
 
+                logger.info(">>>>>>>>>>> jrpc, zk re-connect reloadAll success.");
+            }
+
+            String path = event.getPath();
+            String serverName = pathToServerName(path);
+            try {
+                // 继续监听
+                zkClient.getClient().exists(path, null);
+
+                if (Watcher.Event.EventType.NodeChildrenChanged == event.getType()) {
+                    refreshRegistryServers(serverName);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
+
+        // 后台开启线程定时刷新
+
+        logger.info(">>>>>>>>>>> jrpc, ZkServerRegistry init success. [env={}]", zkPath);
     }
 
     @Override
@@ -80,16 +106,57 @@ public class ZkServerRegistry extends AbstractServerRegistry {
 
     @Override
     public HashSet<String> lookupOne(String serverName) {
-        return null;
+        return registryServers.get(serverName);
     }
 
     @Override
     public boolean register(String serverName, String address) {
-        return false;
+        if (StringUtil.isNullOrEmpty(serverName) || StringUtil.isNullOrEmpty(address)) {
+            return false;
+        }
+
+        HashSet<String> addresses = registryServers.get(serverName);
+        if (Objects.isNull(addresses)) {
+            addresses = new HashSet<>();
+            registryServers.put(serverName, addresses);
+        }
+        addresses.add(address);
+
+        String path = serverNameToPath(serverName);
+        zkClient.setChildPathData(path, address, "");
+
+        return true;
     }
 
     @Override
     public boolean remove(String serverName, String address) {
         return false;
+    }
+
+    /**
+     * 根据服务器名称生成相应的节点路径
+     *
+     * @param serverName 服务器名称
+     * @return 相应的节点路径
+     */
+    private String serverNameToPath(String serverName) {
+        return zkPath + "/" + serverName;
+    }
+
+    /**
+     * 根据节点路径获取服务名称
+     *
+     * @param nodePath 节点路径
+     * @return 相应的服务名称
+     */
+    private String pathToServerName(String nodePath) {
+        if (StringUtil.isNullOrEmpty(nodePath) || nodePath.length() <= zkPath.length() || !nodePath.startsWith(zkPath)) {
+            return null;
+        }
+
+        return nodePath.substring(zkPath.length(), nodePath.length());
+    }
+
+    private void refreshRegistryServers(String serverName) {
     }
 }

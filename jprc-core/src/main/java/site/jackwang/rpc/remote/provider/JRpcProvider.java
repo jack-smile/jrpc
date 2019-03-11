@@ -1,6 +1,7 @@
 package site.jackwang.rpc.remote.provider;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,22 +65,35 @@ public class JRpcProvider {
      */
     private Serializer serializer;
 
+    /**
+     * 本地缓存将要发布对外提供的服务
+     */
+    private Map<String, String> serviceMap = new HashMap<>();
+
 
     /**
      * 初始化配置
      *
      * @param serverRegistry 注册器
+     * @param params         参数配置集合（参数名：参数值）
      * @param serializer     序列化方式
      * @param port           监听端口
      */
-    public void init(AbstractServerRegistry serverRegistry, Serializer serializer, String ip, int port) {
+    public void init(AbstractServerRegistry serverRegistry, Map<String, String> params, Serializer serializer, String ip, int port) {
         this.serverRegistry = serverRegistry;
+        if (Objects.nonNull(this.serverRegistry)) {
+            this.serverRegistry.init(params);
+        }
+
         this.serializer = serializer;
+
         this.ip = ip;
         if (Objects.isNull(this.ip)) {
             this.ip = IpUtils.getIp();
         }
+
         this.port = port;
+
         this.address = IpUtils.getIpPort(this.ip, port);
     }
 
@@ -90,7 +104,13 @@ public class JRpcProvider {
         NettyServer server = new NettyServer(port);
         server.start(this, serializer);
 
-        serverRegistry.start();
+        if (Objects.nonNull(serverRegistry)) {
+            serverRegistry.start();
+
+            for (Map.Entry<String, String> entry : serviceMap.entrySet()) {
+                serverRegistry.register(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     /**
@@ -112,9 +132,10 @@ public class JRpcProvider {
         interfaces.put(serviceInterface.getName(), serviceInterface);
         interfaceImpls.put(serviceInterface.getName(), serviceImpl);
 
-        if (Objects.nonNull(serverRegistry)) {
-            serverRegistry.register(serviceInterface.getName(), address);
-        }
+//        if (Objects.nonNull(serverRegistry)) {
+//            serverRegistry.register(serviceInterface.getName(), address);
+//        }
+        serviceMap.put(serviceInterface.getName(), address);
     }
 
     /**

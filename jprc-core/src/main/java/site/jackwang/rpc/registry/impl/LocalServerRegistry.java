@@ -20,7 +20,7 @@ public class LocalServerRegistry extends AbstractServerRegistry {
     }
 
     @Override
-    public void init(Map<String, String> param) {
+    public void init(Map<String, String> params) {
 
     }
 

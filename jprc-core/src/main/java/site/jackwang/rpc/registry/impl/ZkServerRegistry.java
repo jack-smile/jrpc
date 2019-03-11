@@ -1,15 +1,15 @@
 package site.jackwang.rpc.registry.impl;
 
 import io.netty.util.internal.StringUtil;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import org.apache.zookeeper.Watcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import site.jackwang.rpc.registry.AbstractServerRegistry;
 import site.jackwang.rpc.util.JZkClient;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * 使用zookeeper作为注册中心
@@ -61,6 +61,16 @@ public class ZkServerRegistry extends AbstractServerRegistry {
      */
     private String zkDigest;
 
+    /**
+     * 后台刷新数据线程
+     */
+    private Thread refreshThread;
+
+    /**
+     * 后台刷新数据线程停止标记
+     */
+    private volatile boolean refreshThreadStop;
+
 
     @Override
     public void init(Map<String, String> param) {
@@ -95,6 +105,20 @@ public class ZkServerRegistry extends AbstractServerRegistry {
         });
 
         // TODO 后台开启线程定时刷新本地缓存
+        refreshThread = new Thread(() -> {
+            while (!refreshThreadStop) {
+                refreshLocalRegistryServers("");
+
+                try {
+                    TimeUnit.SECONDS.sleep(60);
+                } catch (InterruptedException e) {
+                    logger.error(">>>>>>>>>>> jrpc, refresh thread error.", e);
+                }
+            }
+        });
+        refreshThread.setName("jrpc zk refresh server thread");
+        refreshThread.setDaemon(true);
+        refreshThread.start();
 
         logger.info(">>>>>>>>>>> jrpc, ZkServerRegistry init success. [env={}]", zkPath);
     }
@@ -108,7 +132,13 @@ public class ZkServerRegistry extends AbstractServerRegistry {
 
     @Override
     public HashSet<String> lookupOne(String serverName) {
-        return registryServers.get(serverName);
+        HashSet<String> addresses = registryServers.get(serverName);
+        if (Objects.isNull(addresses)) {
+            refreshLocalRegistryServers(serverName);
+
+            addresses = registryServers.get(serverName);
+        }
+        return addresses;
     }
 
     @Override
@@ -161,7 +191,7 @@ public class ZkServerRegistry extends AbstractServerRegistry {
      * @return 相应的节点路径
      */
     private String serverNameToPath(String serverName) {
-        return zkPath + "/" + serverName;
+        return StringUtil.isNullOrEmpty(serverName) ? zkPath : zkPath + "/" + serverName;
     }
 
     /**
@@ -178,6 +208,11 @@ public class ZkServerRegistry extends AbstractServerRegistry {
         return nodePath.substring(zkPath.length(), nodePath.length());
     }
 
+    /**
+     * 刷新本地缓存的服务及相应的服务器地址信息
+     *
+     * @param serverName 指定刷新的服务名称；如果传null，则刷新所有
+     */
     private void refreshLocalRegistryServers(String serverName) {
         String path = serverNameToPath(serverName);
         Map<String, String> address = zkClient.getChildPathData(path);

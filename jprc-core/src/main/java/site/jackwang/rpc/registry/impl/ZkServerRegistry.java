@@ -1,15 +1,17 @@
 package site.jackwang.rpc.registry.impl;
 
 import io.netty.util.internal.StringUtil;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import org.apache.zookeeper.Watcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import site.jackwang.rpc.registry.AbstractServerRegistry;
 import site.jackwang.rpc.util.JZkClient;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 使用zookeeper作为注册中心
@@ -107,13 +109,13 @@ public class ZkServerRegistry extends AbstractServerRegistry {
         // TODO 后台开启线程定时刷新本地缓存
         refreshThread = new Thread(() -> {
             while (!refreshThreadStop) {
-                refreshLocalRegistryServers("");
-
                 try {
                     TimeUnit.SECONDS.sleep(60);
                 } catch (InterruptedException e) {
                     logger.error(">>>>>>>>>>> jrpc, refresh thread error.", e);
                 }
+
+                refreshLocalRegistryServers(null);
             }
         });
         refreshThread.setName("jrpc zk refresh server thread");
@@ -127,6 +129,11 @@ public class ZkServerRegistry extends AbstractServerRegistry {
     public void stop() {
         if (Objects.nonNull(zkClient)) {
             zkClient.destroy();
+        }
+
+        if (Objects.nonNull(refreshThread)) {
+            refreshThreadStop = true;
+            refreshThread.interrupt();
         }
     }
 
@@ -211,19 +218,33 @@ public class ZkServerRegistry extends AbstractServerRegistry {
     /**
      * 刷新本地缓存的服务及相应的服务器地址信息
      *
-     * @param serverName 指定刷新的服务名称；如果传null，则刷新所有
+     * @param serverName 指定刷新的服务名称；如果传null或者""，则刷新所有
      */
     private void refreshLocalRegistryServers(String serverName) {
-        String path = serverNameToPath(serverName);
-        Map<String, String> address = zkClient.getChildPathData(path);
-        HashSet<String> addresses = registryServers.get(serverName);
-        if (Objects.isNull(addresses)) {
-            addresses = new HashSet<>();
-            registryServers.put(serverName, addresses);
+        Set<String> serverNames = new HashSet<>();
+        if (StringUtil.isNullOrEmpty(serverName)) {
+            if (registryServers.size() > 0) {
+                serverNames.addAll(registryServers.keySet());
+            }
+        } else {
+            serverNames.add(serverName);
         }
-        if (Objects.nonNull(address) && address.size() > 0) {
-            addresses.clear();
-            addresses.addAll(address.keySet());
+
+        for (String serverNameItem : serverNames) {
+            String path = serverNameToPath(serverNameItem);
+            Map<String, String> address = zkClient.getChildPathData(path);
+
+            HashSet<String> addresses = registryServers.get(serverNameItem);
+            if (Objects.isNull(addresses)) {
+                addresses = new HashSet<>();
+                registryServers.put(path, addresses);
+            }
+            if (Objects.nonNull(address) && address.size() > 0) {
+                addresses.clear();
+                addresses.addAll(address.keySet());
+            }
         }
+
+        logger.info(">>>>>>>>>>> jrpc, refresh discovery data success, discoveryData = {}", registryServers);
     }
 }

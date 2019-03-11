@@ -21,9 +21,9 @@ public abstract class AbstractServerRegistry implements RegistryServer, LookupSe
     /**
      * 初始化，主要是初始化参数配置
      *
-     * @param param 参数配置
+     * @param params 参数配置集合（参数名：参数值）
      */
-    public abstract void init(Map<String, String> param);
+    public abstract void init(Map<String, String> params);
 
     /**
      * 开始

@@ -1,7 +1,6 @@
 package site.jackwang.rpc.registry.impl;
 
 import io.netty.util.internal.StringUtil;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -21,7 +20,7 @@ public class LocalServerRegistry extends AbstractServerRegistry {
     }
 
     @Override
-    public void init(Map<String, String> param) {
+    public void init(Map<String, String> params) {
 
     }
 

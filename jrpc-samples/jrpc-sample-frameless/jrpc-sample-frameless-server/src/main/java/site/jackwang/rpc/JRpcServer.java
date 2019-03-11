@@ -1,6 +1,9 @@
 package site.jackwang.rpc;
 
+import java.util.HashMap;
+import java.util.Map;
 import site.jackwang.rpc.registry.impl.LocalServerRegistry;
+import site.jackwang.rpc.registry.impl.ZkServerRegistry;
 import site.jackwang.rpc.remote.net.impl.netty.server.NettyServer;
 import site.jackwang.rpc.remote.provider.JRpcProvider;
 import site.jackwang.rpc.serialize.SerializeEnum;
@@ -14,10 +17,12 @@ import site.jackwang.rpc.service.impl.HelloServiceImpl;
  * @date 2019/1/17
  */
 public class JRpcServer {
-    public static void main(String[] args) {
-        NoneRegistry();
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+//        NoneRegistry();
 
 //        localRegistry();
+
+        ZkRegistry();
     }
 
     private static void NoneRegistry() {
@@ -32,7 +37,22 @@ public class JRpcServer {
     private static void localRegistry() {
         JRpcProvider jRpcProvider = new JRpcProvider();
 
-        jRpcProvider.init(LocalServerRegistry.getInstance(), SerializeEnum.HESSIAN.getSerializer(), null, 8888);
+        jRpcProvider.init(LocalServerRegistry.getInstance(), null, SerializeEnum.HESSIAN.getSerializer(), null, 8888);
+
+        jRpcProvider.publishService(CalculatorService.class, new CalculatorServiceImpl());
+        jRpcProvider.publishService(HelloService.class, new HelloServiceImpl());
+
+        jRpcProvider.start();
+    }
+
+    private static void ZkRegistry() throws IllegalAccessException, InstantiationException {
+        JRpcProvider jRpcProvider = new JRpcProvider();
+
+        Map<String, String> params = new HashMap<>();
+        params.put(ZkServerRegistry.ZK_ADDRESS, "127.0.0.1:2181");
+        params.put(ZkServerRegistry.ZK_DIGEST, "");
+        params.put(ZkServerRegistry.ENV, "dev");
+        jRpcProvider.init(ZkServerRegistry.class.newInstance(), params, SerializeEnum.HESSIAN.getSerializer(), null, 8888);
 
         jRpcProvider.publishService(CalculatorService.class, new CalculatorServiceImpl());
         jRpcProvider.publishService(HelloService.class, new HelloServiceImpl());

@@ -21,6 +21,7 @@ public enum ErrorCodes {
     ILLEGAL_CLASS_NAME(10014, "illegal class name"),
     CLASS_NOT_FOUND(10015, "class '%s' not found"),
     METHOD_UNEXPECTED_PARAMETERS(10016, "Method requires unexpected parameters"),
+    NOT_INTERFACE(10017, "The interface class '%s' is not a interface!"),
 
     // net
     NETTY_SEND_INTERRUPTED(11000, "netty send package interrupted"),

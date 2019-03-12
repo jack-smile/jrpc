@@ -7,6 +7,7 @@ import java.util.Map;
 import site.jackwang.rpc.proxy.CalculatorServiceProxy;
 import site.jackwang.rpc.registry.impl.LocalServerRegistry;
 import site.jackwang.rpc.registry.impl.ZkServerRegistry;
+import site.jackwang.rpc.remote.invoker.ReferenceBean;
 import site.jackwang.rpc.remote.invoker.RpcProxyFactory;
 import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
 import site.jackwang.rpc.serialize.SerializeEnum;
@@ -54,8 +55,29 @@ public class JRpcClient {
         System.out.println(calculatorService.substract(1.0f, 2.0f));
     }
 
+//    private static void testCalculatorServiceZkRegistry() throws InterruptedException {
+//        NettyClient client = new NettyClient();
+//
+//        ZkServerRegistry serverRegistry = new ZkServerRegistry();
+//        Map<String, String> params = new HashMap<>();
+//        params.put(ZkServerRegistry.ZK_ADDRESS, "127.0.0.1:2181");
+//        params.put(ZkServerRegistry.ZK_DIGEST, "");
+//        params.put(ZkServerRegistry.ENV, "dev");
+//        serverRegistry.init(params);
+//        serverRegistry.start();
+//
+//        HashSet<String> serverAddresses = serverRegistry.lookupOne(CalculatorService.class.getName());
+//        Iterator<String> it = serverAddresses.iterator();
+//        Object[] ipPort = IpUtils.parseIpPort(it.next());
+//        client.init((String) ipPort[0], (int) ipPort[1], SerializeEnum.HESSIAN.getSerializer());
+//
+//        CalculatorService calculatorService = RpcProxyFactory.getProxy(CalculatorService.class, client);
+//        System.out.println(calculatorService.add(1.0f, 2.0f));
+//        System.out.println(calculatorService.substract(1.0f, 2.0f));
+//    }
+
     private static void testCalculatorServiceZkRegistry() throws InterruptedException {
-        NettyClient client = new NettyClient();
+        ReferenceBean<CalculatorService> bean = new ReferenceBean<>();
 
         ZkServerRegistry serverRegistry = new ZkServerRegistry();
         Map<String, String> params = new HashMap<>();
@@ -63,14 +85,12 @@ public class JRpcClient {
         params.put(ZkServerRegistry.ZK_DIGEST, "");
         params.put(ZkServerRegistry.ENV, "dev");
         serverRegistry.init(params);
-        serverRegistry.start();
+        bean.setServerRegistry(serverRegistry);
 
-        HashSet<String> serverAddresses = serverRegistry.lookupOne(CalculatorService.class.getName());
-        Iterator<String> it = serverAddresses.iterator();
-        Object[] ipPort = IpUtils.parseIpPort(it.next());
-        client.init((String) ipPort[0], (int) ipPort[1], SerializeEnum.HESSIAN.getSerializer());
+        bean.setSerializer(SerializeEnum.HESSIAN.getSerializer());
+        bean.setInterface(CalculatorService.class);
+        CalculatorService calculatorService = bean.get();
 
-        CalculatorService calculatorService = RpcProxyFactory.getProxy(CalculatorService.class, client);
         System.out.println(calculatorService.add(1.0f, 2.0f));
         System.out.println(calculatorService.substract(1.0f, 2.0f));
     }

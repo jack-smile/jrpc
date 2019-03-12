@@ -1,17 +1,16 @@
 package site.jackwang.rpc.registry.impl;
 
 import io.netty.util.internal.StringUtil;
-import org.apache.zookeeper.Watcher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import site.jackwang.rpc.registry.AbstractServerRegistry;
-import site.jackwang.rpc.util.JZkClient;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import org.apache.zookeeper.Watcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import site.jackwang.rpc.registry.AbstractServerRegistry;
+import site.jackwang.rpc.util.JZkClient;
 
 /**
  * 使用zookeeper作为注册中心
@@ -95,27 +94,29 @@ public class ZkServerRegistry extends AbstractServerRegistry {
             String path = event.getPath();
             String serverName = pathToServerName(path);
             try {
-                // 继续监听
-                zkClient.getClient().exists(path, null);
+                if (Objects.nonNull(path)) {
+                    // 继续监听
+                    zkClient.getClient().exists(path, null);
 
-                if (Watcher.Event.EventType.NodeChildrenChanged == event.getType()) {
-                    refreshLocalRegistryServers(serverName);
+                    if (Watcher.Event.EventType.NodeChildrenChanged == event.getType()) {
+                        refreshLocalRegistryServers(serverName);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
 
-        // TODO 后台开启线程定时刷新本地缓存
+        // 后台开启线程定时刷新本地缓存
         refreshThread = new Thread(() -> {
             while (!refreshThreadStop) {
                 try {
                     TimeUnit.SECONDS.sleep(60);
-                } catch (InterruptedException e) {
-                    logger.error(">>>>>>>>>>> jrpc, refresh thread error.", e);
-                }
 
-                refreshLocalRegistryServers(null);
+                    refreshLocalRegistryServers(null);
+                } catch (Exception e) {
+                    logger.error(">>>>>>>>>>> jrpc, refresh thread error: ", e);
+                }
             }
         });
         refreshThread.setName("jrpc zk refresh server thread");
@@ -237,7 +238,7 @@ public class ZkServerRegistry extends AbstractServerRegistry {
             HashSet<String> addresses = registryServers.get(serverNameItem);
             if (Objects.isNull(addresses)) {
                 addresses = new HashSet<>();
-                registryServers.put(path, addresses);
+                registryServers.put(serverNameItem, addresses);
             }
             if (Objects.nonNull(address) && address.size() > 0) {
                 addresses.clear();

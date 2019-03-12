@@ -1,17 +1,16 @@
 package site.jackwang.rpc.registry.impl;
 
 import io.netty.util.internal.StringUtil;
-import org.apache.zookeeper.Watcher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import site.jackwang.rpc.registry.AbstractServerRegistry;
-import site.jackwang.rpc.util.JZkClient;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import org.apache.zookeeper.Watcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import site.jackwang.rpc.registry.AbstractServerRegistry;
+import site.jackwang.rpc.util.JZkClient;
 
 /**
  * 使用zookeeper作为注册中心
@@ -113,11 +112,11 @@ public class ZkServerRegistry extends AbstractServerRegistry {
             while (!refreshThreadStop) {
                 try {
                     TimeUnit.SECONDS.sleep(60);
-                } catch (InterruptedException e) {
-                    logger.error(">>>>>>>>>>> jrpc, refresh thread error.", e);
-                }
 
-                refreshLocalRegistryServers(null);
+                    refreshLocalRegistryServers(null);
+                } catch (Exception e) {
+                    logger.error(">>>>>>>>>>> jrpc, refresh thread error: ", e);
+                }
             }
         });
         refreshThread.setName("jrpc zk refresh server thread");

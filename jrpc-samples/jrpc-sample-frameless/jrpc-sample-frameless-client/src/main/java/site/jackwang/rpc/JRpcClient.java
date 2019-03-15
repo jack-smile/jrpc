@@ -1,10 +1,7 @@
 package site.jackwang.rpc;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import site.jackwang.rpc.loadbalance.impl.RoundRobinLoadBalance;
+import site.jackwang.rpc.common.util.IpUtils;
+import site.jackwang.rpc.loadbalance.LoadBalanceEnum;
 import site.jackwang.rpc.proxy.CalculatorServiceProxy;
 import site.jackwang.rpc.registry.impl.LocalServerRegistry;
 import site.jackwang.rpc.registry.impl.ZkServerRegistry;
@@ -15,7 +12,11 @@ import site.jackwang.rpc.serialize.SerializeEnum;
 import site.jackwang.rpc.serialize.impl.ProtostuffSerializer;
 import site.jackwang.rpc.service.CalculatorService;
 import site.jackwang.rpc.service.HelloService;
-import site.jackwang.rpc.common.util.IpUtils;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author wangjie<http://www.jackwang.site/>
@@ -90,7 +91,7 @@ public class JRpcClient {
 
         bean.setSerializer(SerializeEnum.HESSIAN.getSerializer());
         bean.setInterface(CalculatorService.class);
-        bean.setLoadBalance(new RoundRobinLoadBalance());
+        bean.setLoadBalance(LoadBalanceEnum.Random.getLoadBalance());
 
         CalculatorService calculatorService = bean.get();
 

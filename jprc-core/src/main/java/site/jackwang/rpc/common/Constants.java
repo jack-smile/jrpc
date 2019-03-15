@@ -3,7 +3,7 @@ package site.jackwang.rpc.common;
 import java.util.regex.Pattern;
 
 /**
- * @author jie.wang001@bkjk.com
+ * @author <http://www.jackwang.site/>
  * @date 2019/3/15
  */
 public class Constants {

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import site.jackwang.rpc.loadbalance.impl.RoundRobinLoadBalance;
 import site.jackwang.rpc.proxy.CalculatorServiceProxy;
 import site.jackwang.rpc.registry.impl.LocalServerRegistry;
 import site.jackwang.rpc.registry.impl.ZkServerRegistry;
@@ -89,6 +90,8 @@ public class JRpcClient {
 
         bean.setSerializer(SerializeEnum.HESSIAN.getSerializer());
         bean.setInterface(CalculatorService.class);
+        bean.setLoadBalance(new RoundRobinLoadBalance());
+
         CalculatorService calculatorService = bean.get();
 
         System.out.println(calculatorService.add(1.0f, 2.0f));

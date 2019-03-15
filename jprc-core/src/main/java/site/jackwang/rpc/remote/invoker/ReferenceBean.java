@@ -1,12 +1,12 @@
 package site.jackwang.rpc.remote.invoker;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import site.jackwang.rpc.common.util.IpUtils;
 import site.jackwang.rpc.common.util.exception.ErrorCodes;
 import site.jackwang.rpc.common.util.exception.JRpcException;
+import site.jackwang.rpc.loadbalance.AbstractLoadBalance;
 import site.jackwang.rpc.registry.AbstractServerRegistry;
 import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
 import site.jackwang.rpc.serialize.AbstractSerializer;
@@ -46,6 +46,11 @@ public class ReferenceBean<T> {
      */
     private AbstractSerializer serializer = SerializeEnum.HESSIAN.getSerializer();
 
+    /**
+     * 负载均衡
+     */
+    private AbstractLoadBalance loadBalance;
+
 
     public void setInterface(Class<?> interfaceClass) {
         if (interfaceClass != null && !interfaceClass.isInterface()) {
@@ -67,13 +72,18 @@ public class ReferenceBean<T> {
         this.serializer = serializer;
     }
 
+    public void setLoadBalance(AbstractLoadBalance loadBalance) {
+        this.loadBalance = loadBalance;
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes", "deprecation"})
     public T get() {
         serverRegistry.start();
 
         HashSet<String> serverAddresses = serverRegistry.lookupOne(interfaceName);
-        Iterator<String> it = serverAddresses.iterator();
-        Object[] ipPort = IpUtils.parseIpPort(it.next());
+
+        String address = loadBalance.select(interfaceName, serverAddresses);
+        Object[] ipPort = IpUtils.parseIpPort(address);
         try {
             client.init((String) ipPort[0], (int) ipPort[1], serializer);
         } catch (InterruptedException e) {

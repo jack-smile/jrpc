@@ -15,7 +15,7 @@ import site.jackwang.rpc.util.exception.JRpcException;
 /**
  * 接口实现bean
  *
- * @author jie.wang001@bkjk.com
+ * @author wangjie<http://www.jackwang.site/>
  * @date 2019/3/12
  */
 public class ReferenceBean<T> {

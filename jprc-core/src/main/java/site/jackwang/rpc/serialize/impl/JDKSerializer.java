@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 /**
  * jdk自带的序列化工具

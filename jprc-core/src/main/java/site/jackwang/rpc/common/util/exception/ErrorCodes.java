@@ -1,4 +1,4 @@
-package site.jackwang.rpc.util.exception;
+package site.jackwang.rpc.common.util.exception;
 
 public enum ErrorCodes {
     // serialize

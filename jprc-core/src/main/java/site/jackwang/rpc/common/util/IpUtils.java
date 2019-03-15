@@ -1,4 +1,4 @@
-package site.jackwang.rpc.util;
+package site.jackwang.rpc.common.util;
 
 import java.io.IOException;
 import java.net.Inet6Address;

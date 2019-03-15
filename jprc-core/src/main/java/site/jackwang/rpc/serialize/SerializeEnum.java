@@ -1,7 +1,7 @@
 package site.jackwang.rpc.serialize;
 
 import site.jackwang.rpc.serialize.impl.*;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 /**
  * 序列化单例

@@ -5,7 +5,7 @@ import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
 import site.jackwang.rpc.serialize.Serializer;
 import site.jackwang.rpc.service.CalculatorService;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 import java.util.UUID;
 import java.util.concurrent.SynchronousQueue;

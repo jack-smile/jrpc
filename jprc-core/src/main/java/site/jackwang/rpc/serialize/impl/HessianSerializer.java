@@ -6,8 +6,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 /**
  * Hessian序列化

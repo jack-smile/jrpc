@@ -8,9 +8,9 @@ import site.jackwang.rpc.registry.AbstractServerRegistry;
 import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
 import site.jackwang.rpc.serialize.SerializeEnum;
 import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.util.IpUtils;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.IpUtils;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 /**
  * 接口实现bean

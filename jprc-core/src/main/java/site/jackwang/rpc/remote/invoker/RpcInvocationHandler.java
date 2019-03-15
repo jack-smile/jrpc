@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

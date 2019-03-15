@@ -3,8 +3,8 @@ package site.jackwang.rpc.serialize.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 import java.io.IOException;
 

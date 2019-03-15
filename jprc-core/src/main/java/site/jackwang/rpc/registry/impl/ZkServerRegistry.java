@@ -10,7 +10,7 @@ import org.apache.zookeeper.Watcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import site.jackwang.rpc.registry.AbstractServerRegistry;
-import site.jackwang.rpc.util.JZkClient;
+import site.jackwang.rpc.common.util.JZkClient;
 
 /**
  * 使用zookeeper作为注册中心

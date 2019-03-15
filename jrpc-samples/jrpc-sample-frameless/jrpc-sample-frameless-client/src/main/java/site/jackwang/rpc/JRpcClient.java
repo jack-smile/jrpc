@@ -14,7 +14,7 @@ import site.jackwang.rpc.serialize.SerializeEnum;
 import site.jackwang.rpc.serialize.impl.ProtostuffSerializer;
 import site.jackwang.rpc.service.CalculatorService;
 import site.jackwang.rpc.service.HelloService;
-import site.jackwang.rpc.util.IpUtils;
+import site.jackwang.rpc.common.util.IpUtils;
 
 /**
  * @author wangjie<http://www.jackwang.site/>

@@ -5,7 +5,7 @@ import com.caucho.hessian.io.Hessian2Output;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 import site.jackwang.rpc.common.util.exception.ErrorCodes;
 import site.jackwang.rpc.common.util.exception.JRpcException;
 
@@ -17,7 +17,7 @@ import site.jackwang.rpc.common.util.exception.JRpcException;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/22
  */
-public class HessianSerializer extends Serializer {
+public class HessianSerializer extends AbstractSerializer {
     @Override
     public <T> byte[] serialize(T obj) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();

@@ -2,7 +2,7 @@ package site.jackwang.rpc.serialize.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 import site.jackwang.rpc.common.util.exception.ErrorCodes;
 import site.jackwang.rpc.common.util.exception.JRpcException;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/21
  */
-public class JacksonSerializer extends Serializer {
+public class JacksonSerializer extends AbstractSerializer {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

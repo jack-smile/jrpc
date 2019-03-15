@@ -4,13 +4,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import site.jackwang.rpc.registry.AbstractServerRegistry;
-import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
-import site.jackwang.rpc.serialize.SerializeEnum;
-import site.jackwang.rpc.serialize.Serializer;
 import site.jackwang.rpc.common.util.IpUtils;
 import site.jackwang.rpc.common.util.exception.ErrorCodes;
 import site.jackwang.rpc.common.util.exception.JRpcException;
+import site.jackwang.rpc.registry.AbstractServerRegistry;
+import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
+import site.jackwang.rpc.serialize.AbstractSerializer;
+import site.jackwang.rpc.serialize.SerializeEnum;
 
 /**
  * 接口实现bean
@@ -44,7 +44,7 @@ public class ReferenceBean<T> {
     /**
      * 序列化类
      */
-    private Serializer serializer = SerializeEnum.HESSIAN.getSerializer();
+    private AbstractSerializer serializer = SerializeEnum.HESSIAN.getSerializer();
 
 
     public void setInterface(Class<?> interfaceClass) {
@@ -63,7 +63,7 @@ public class ReferenceBean<T> {
         this.serverRegistry = registry;
     }
 
-    public void setSerializer(Serializer serializer) {
+    public void setSerializer(AbstractSerializer serializer) {
         this.serializer = serializer;
     }
 

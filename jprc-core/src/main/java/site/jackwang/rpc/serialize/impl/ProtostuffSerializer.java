@@ -4,7 +4,7 @@ import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 
 import java.util.Map;
 import java.util.Objects;
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/13
  */
-public class ProtostuffSerializer extends Serializer {
+public class ProtostuffSerializer extends AbstractSerializer {
     private static Map<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();
 
     @SuppressWarnings("unchecked")

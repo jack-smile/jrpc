@@ -21,7 +21,7 @@ public class SerializerTest {
         }
     }
 
-    private void testRequest(Serializer serializer) {
+    private void testRequest(AbstractSerializer serializer) {
 
         JRpcRequest request = new JRpcRequest();
         request.setServiceName("site.jackwang.rpc.test.CalculatorService");

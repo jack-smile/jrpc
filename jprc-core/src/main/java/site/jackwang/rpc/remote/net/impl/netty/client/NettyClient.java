@@ -17,7 +17,7 @@ import site.jackwang.rpc.remote.net.impl.netty.codec.NettyDecoder;
 import site.jackwang.rpc.remote.net.impl.netty.codec.NettyEncoder;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 
 /**
  * Netty客户端
@@ -65,7 +65,7 @@ public class NettyClient {
      * @param port       端口
      * @param serializer 序列化类
      */
-    public void init(String host, int port, final Serializer serializer) throws InterruptedException {
+    public void init(String host, int port, final AbstractSerializer serializer) throws InterruptedException {
         this.group = new NioEventLoopGroup();
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group).channel(NioSocketChannel.class)

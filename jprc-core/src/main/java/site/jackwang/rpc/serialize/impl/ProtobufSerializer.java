@@ -6,7 +6,7 @@ import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 import site.jackwang.rpc.common.util.exception.ErrorCodes;
 import site.jackwang.rpc.common.util.exception.JRpcException;
 
@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/13
  */
-public class ProtobufSerializer extends Serializer {
+public class ProtobufSerializer extends AbstractSerializer {
     private static Objenesis objenesis = new ObjenesisStd(true);
     private static Map<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();
 

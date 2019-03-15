@@ -3,7 +3,7 @@ package site.jackwang.rpc.proxy;
 import site.jackwang.rpc.remote.net.impl.netty.client.NettyClient;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 import site.jackwang.rpc.service.CalculatorService;
 import site.jackwang.rpc.common.util.exception.JRpcException;
 
@@ -17,7 +17,7 @@ import java.util.concurrent.SynchronousQueue;
 public class CalculatorServiceProxy implements CalculatorService {
     private NettyClient client;
 
-    public CalculatorServiceProxy(String host, int port, final Serializer serializer) {
+    public CalculatorServiceProxy(String host, int port, final AbstractSerializer serializer) {
         client = new NettyClient();
         try {
             client.init(host, port, serializer);

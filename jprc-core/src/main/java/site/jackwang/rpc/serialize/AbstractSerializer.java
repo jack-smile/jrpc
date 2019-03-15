@@ -7,7 +7,7 @@ package site.jackwang.rpc.serialize;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/13
  */
-public abstract class Serializer {
+public abstract class AbstractSerializer {
     /**
      * 序列化
      *

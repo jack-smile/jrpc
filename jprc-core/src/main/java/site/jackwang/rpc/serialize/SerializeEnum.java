@@ -1,7 +1,7 @@
 package site.jackwang.rpc.serialize;
 
 import site.jackwang.rpc.serialize.impl.*;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 /**
  * 序列化单例
@@ -18,13 +18,13 @@ public enum SerializeEnum {
     JDK_SERIALIZE(JDKSerializer.class),
     FASTJSON_SERIALIZE(FastjsonSerializer.class);
 
-    private Class<? extends Serializer> serializerClass;
+    private Class<? extends AbstractSerializer> serializerClass;
 
-    SerializeEnum(Class<? extends Serializer> serializerClass) {
+    SerializeEnum(Class<? extends AbstractSerializer> serializerClass) {
         this.serializerClass = serializerClass;
     }
 
-    public Serializer getSerializer() {
+    public AbstractSerializer getSerializer() {
         try {
             return serializerClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {

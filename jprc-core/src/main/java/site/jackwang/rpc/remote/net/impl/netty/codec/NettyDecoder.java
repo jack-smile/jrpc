@@ -3,7 +3,7 @@ package site.jackwang.rpc.remote.net.impl.netty.codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import java.util.List;
 public class NettyDecoder extends ByteToMessageDecoder {
 
     private Class<?> genericClass;
-    private Serializer serializer;
+    private AbstractSerializer serializer;
 
-    public NettyDecoder(Class<?> genericClass, final Serializer serializer) {
+    public NettyDecoder(Class<?> genericClass, final AbstractSerializer serializer) {
         this.genericClass = genericClass;
         this.serializer = serializer;
     }

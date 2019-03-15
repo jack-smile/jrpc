@@ -5,9 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.serialize.AbstractSerializer;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 /**
  * jdk自带的序列化工具
@@ -17,7 +17,7 @@ import site.jackwang.rpc.util.exception.JRpcException;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/23
  */
-public class JDKSerializer extends Serializer {
+public class JDKSerializer extends AbstractSerializer {
     @Override
     public <T> byte[] serialize(T obj) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();

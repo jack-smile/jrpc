@@ -11,11 +11,11 @@ import site.jackwang.rpc.registry.AbstractServerRegistry;
 import site.jackwang.rpc.remote.net.impl.netty.server.NettyServer;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
-import site.jackwang.rpc.serialize.Serializer;
-import site.jackwang.rpc.util.IpUtils;
-import site.jackwang.rpc.util.ReflectUtils;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.serialize.AbstractSerializer;
+import site.jackwang.rpc.common.util.IpUtils;
+import site.jackwang.rpc.common.util.ReflectUtils;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 /**
  * 服务提供方
@@ -63,7 +63,7 @@ public class JRpcProvider {
     /**
      * 序列化类
      */
-    private Serializer serializer;
+    private AbstractSerializer serializer;
 
     /**
      * 本地缓存将要发布对外提供的服务
@@ -79,7 +79,7 @@ public class JRpcProvider {
      * @param serializer     序列化方式
      * @param port           监听端口
      */
-    public void init(AbstractServerRegistry serverRegistry, Map<String, String> params, Serializer serializer, String ip, int port) {
+    public void init(AbstractServerRegistry serverRegistry, Map<String, String> params, AbstractSerializer serializer, String ip, int port) {
         this.serverRegistry = serverRegistry;
         if (Objects.nonNull(this.serverRegistry)) {
             this.serverRegistry.init(params);

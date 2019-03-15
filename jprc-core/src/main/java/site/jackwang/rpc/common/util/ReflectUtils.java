@@ -1,4 +1,4 @@
-package site.jackwang.rpc.util;
+package site.jackwang.rpc.common.util;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -8,12 +8,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 public class ReflectUtils {
 
@@ -544,5 +545,17 @@ public class ReflectUtils {
          * @param field the field to check
          */
         boolean matches(Field field);
+    }
+
+    public static boolean isPrimitives(Class<?> cls) {
+        if (cls.isArray()) {
+            return isPrimitive(cls.getComponentType());
+        }
+        return isPrimitive(cls);
+    }
+
+    public static boolean isPrimitive(Class<?> cls) {
+        return cls.isPrimitive() || cls == String.class || cls == Boolean.class || cls == Character.class
+            || Number.class.isAssignableFrom(cls) || Date.class.isAssignableFrom(cls);
     }
 }

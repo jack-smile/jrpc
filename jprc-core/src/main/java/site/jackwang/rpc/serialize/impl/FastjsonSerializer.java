@@ -1,7 +1,7 @@
 package site.jackwang.rpc.serialize.impl;
 
 import com.alibaba.fastjson.JSON;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 
 /**
  * fastjson序列化
@@ -14,7 +14,7 @@ import site.jackwang.rpc.serialize.Serializer;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/26
  */
-public class FastjsonSerializer extends Serializer {
+public class FastjsonSerializer extends AbstractSerializer {
 
     @Override
     public <T> byte[] serialize(T obj) {

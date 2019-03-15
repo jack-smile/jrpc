@@ -15,7 +15,7 @@ import site.jackwang.rpc.remote.net.impl.netty.codec.NettyEncoder;
 import site.jackwang.rpc.remote.net.params.JRpcRequest;
 import site.jackwang.rpc.remote.net.params.JRpcResponse;
 import site.jackwang.rpc.remote.provider.JRpcProvider;
-import site.jackwang.rpc.serialize.Serializer;
+import site.jackwang.rpc.serialize.AbstractSerializer;
 
 /**
  * Netty服务端
@@ -41,7 +41,7 @@ public class NettyServer {
         this.port = port;
     }
 
-    public void start(final JRpcProvider jRpcProvider, final Serializer serializer) {
+    public void start(final JRpcProvider jRpcProvider, final AbstractSerializer serializer) {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {

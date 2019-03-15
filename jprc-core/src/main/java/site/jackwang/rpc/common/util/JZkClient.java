@@ -1,4 +1,4 @@
-package site.jackwang.rpc.util;
+package site.jackwang.rpc.common.util;
 
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.Watcher;
@@ -7,8 +7,8 @@ import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import site.jackwang.rpc.util.exception.ErrorCodes;
-import site.jackwang.rpc.util.exception.JRpcException;
+import site.jackwang.rpc.common.util.exception.ErrorCodes;
+import site.jackwang.rpc.common.util.exception.JRpcException;
 
 import java.util.HashMap;
 import java.util.List;

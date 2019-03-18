@@ -91,7 +91,7 @@ public class JRpcClient {
 
         bean.setSerializer(SerializeEnum.HESSIAN.getSerializer());
         bean.setInterface(CalculatorService.class);
-        bean.setLoadBalance(LoadBalanceEnum.Random.getLoadBalance());
+        bean.setLoadBalance(LoadBalanceEnum.ROUND_ROBIN.getLoadBalance());
 
         CalculatorService calculatorService = bean.get();
 

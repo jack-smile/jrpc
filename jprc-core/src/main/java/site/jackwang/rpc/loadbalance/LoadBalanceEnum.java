@@ -2,6 +2,7 @@ package site.jackwang.rpc.loadbalance;
 
 import site.jackwang.rpc.common.util.exception.JRpcException;
 import site.jackwang.rpc.loadbalance.impl.ConsistentHashLoadBalance;
+import site.jackwang.rpc.loadbalance.impl.LRULoadBalance;
 import site.jackwang.rpc.loadbalance.impl.RandomLoadBalance;
 import site.jackwang.rpc.loadbalance.impl.RoundRobinLoadBalance;
 
@@ -14,7 +15,8 @@ import site.jackwang.rpc.loadbalance.impl.RoundRobinLoadBalance;
 public enum LoadBalanceEnum {
     ROUND_ROBIN(RoundRobinLoadBalance.class),
     RANDOM(RandomLoadBalance.class),
-    CONSISTENT_HASH(ConsistentHashLoadBalance.class);
+    CONSISTENT_HASH(ConsistentHashLoadBalance.class),
+    LRU(LRULoadBalance.class);
 
     private Class<? extends AbstractLoadBalance> loadbalanceClass;
 

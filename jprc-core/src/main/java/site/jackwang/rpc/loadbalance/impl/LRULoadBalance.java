@@ -12,6 +12,8 @@ import site.jackwang.rpc.loadbalance.AbstractLoadBalance;
  * 基于 LinkedHashMap(HashMap 和 双向链表) 实现LRU
  * 时间复杂度O(1)
  *
+ * TODO LRF-K 优化
+ *
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/3/19
  */

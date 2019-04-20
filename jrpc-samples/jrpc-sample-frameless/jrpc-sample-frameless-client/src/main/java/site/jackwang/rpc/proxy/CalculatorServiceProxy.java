@@ -14,6 +14,7 @@ import java.util.concurrent.SynchronousQueue;
  * @author wangjie<http://www.jackwang.site/>
  * @date 2019/1/17
  */
+@Deprecated
 public class CalculatorServiceProxy implements CalculatorService {
     private NettyClient client;
 

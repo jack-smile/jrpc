@@ -46,7 +46,7 @@ public class ConsistentHashLoadBalance extends AbstractLoadBalance {
         // 根据服务名称，获取提供服务的服务器地址
         long serverHash = hash(md5(serverName), 0);
         Map.Entry<Long, String> addressEntry = virtualServerAddresses.ceilingEntry(serverHash);
-        if (Objects.nonNull(addressEntry)) {
+        if (Objects.isNull(addressEntry)) {
             addressEntry = virtualServerAddresses.firstEntry();
         }
 
